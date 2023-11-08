@@ -91,7 +91,7 @@ export const Clock = () => {
                 </div>
             </div>
 
-            <Footer Buttoms={Buttom_arr} Class="[ footer flex justify-center bg-base-200 text-base-content absolute bottom-0 left-0 ]" />
+            <Footer Buttoms={Buttom_arr} Class="[ footer transition-all flex justify-center bg-base-200 text-base-content absolute bottom-0 left-0 ]" />
         </div>
 
     </>
