@@ -6,9 +6,12 @@
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
+    "date-fns": "^2.30.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "react-particles": "^2.12.2",
+    "tsparticles-slim": "^2.12.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1",
