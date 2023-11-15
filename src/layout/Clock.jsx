@@ -19,6 +19,7 @@ export const Clock = () => {
     const [formato24h, setFormato24h] = useState(false);
     const [ampm, setAmPm] = useState('');
     const [Fecha, setFecha] = useState('Cargando');
+    const [Country, setCountry] = useState("Cargando");
     // const [backgrounds, setbackgrounds] = useState({
     //     0: 'enero.jpg',
     //     1: 'febrero.jpg',
@@ -36,32 +37,40 @@ export const Clock = () => {
     //     default: "black"
     // });
 
-
-
+    const [windSpeed, setWindSpeed] = useState('Cargando');
     const [BackgroundColor, setBackgroundColor] = useState(``);
-
     const [temperature, setTemperature] = useState('Cargando');
     const [feelsLike, setFeelsLike] = useState('Cargando');
     const [humidity, sethumidity] = useState('Cargando');
-
     const [weatherEmoji, setWeatherEmoji] = useState('https://placehold.jp/3d4070/ffffff/150x150.png?text=Cargando...');
+
     useEffect(() => {
         const apiKey = import.meta.env.VITE_APY_KEY;
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                fetchData(latitude, longitude);
+
+        function ObtenerLocalizacion() {
+            sethumidity("Cargando");
+            setTemperature("Cargando");
+            setFeelsLike("Cargando");
+            setCountry("Cargando");
+            setWeatherEmoji(`https://placehold.jp/3d4070/ffffff/150x150.png?text=Cargando...`);
+            setWindSpeed("Cargando");
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    fetchData(latitude, longitude);
 
 
 
-            }, function (error) {
-                console.error('Error al obtener la ubicación:', error);
-            });
-        } else {
-            console.error('La geolocalización no es compatible con este navegador.');
+                }, function (error) {
+                    console.error('Error al obtener la ubicación:', error);
+                });
+            } else {
+                console.error('La geolocalización no es compatible con este navegador.');
+            }
+
         }
-
+        ObtenerLocalizacion();
 
 
         const fetchData = async (lat, lon) => {
@@ -79,8 +88,12 @@ export const Clock = () => {
                 sethumidity(humidity + "%");
                 setTemperature(temperatureCelsius + "°C");
                 setFeelsLike(feelsLikeCelsius + "°C");
+                setCountry(data.name);
                 const weatherCondition = data.weather[0].icon;
                 setWeatherEmoji(`https://openweathermap.org/img/wn/${weatherCondition}@2x.png`);
+                const windSpeed = data.wind.speed;
+                setWindSpeed(windSpeed + " m/s");
+
             } catch (error) {
                 console.error('Error fetching weather data:', error);
             }
@@ -112,6 +125,11 @@ export const Clock = () => {
                 setBackgroundColor(`rgb(${red}, ${green}, ${blue})`);
             }
         };
+
+        setInterval(() => {
+            ObtenerLocalizacion();
+        }, 180000); //3 minutes  
+
 
         const interval = setInterval(() => {
             let fecha = new Date();
@@ -192,7 +210,7 @@ export const Clock = () => {
                         <div className='[ text-lg ]'>{ampm} </div>
                     </div>
                     <div className='[ flex flex-nowrap w-full justify-between flex-col ]'>
-                        <div>{Fecha}</div>
+                        <div>{Country + " " + Fecha}</div>
                         <div className='[ font-light flex gap-3 justify- items-center ]'>
                             Temperatura: <span className='[ font-bold ]'>{temperature}</span>
                             <img className='[ w-10 h-10 ]' src={`${weatherEmoji}`} alt="" />
@@ -204,7 +222,9 @@ export const Clock = () => {
                             Humedad: <span className='[ font-bold ]'>{humidity}</span>
                         </div>
 
-
+                        <div className='[ font-light ]'>
+                            Velocidad del viento: <span className='[ font-bold ]'>{windSpeed}</span>
+                        </div>
                     </div>
                 </div>
 

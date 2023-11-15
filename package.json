@@ -7,11 +7,14 @@
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
     "date-fns": "^2.30.0",
+    "geolib": "^3.3.4",
+    "nominatim": "^0.1.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
     "react-particles": "^2.12.2",
-    "tsparticles-slim": "^2.12.0"
+    "tsparticles-slim": "^2.12.0",
+    "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1",
