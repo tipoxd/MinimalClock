@@ -215,12 +215,12 @@ export const Clock = () => {
     };
 
     return (<>
-        <div className='[ static  h-screen w-full  ]' style={{ backgroundColor: BackgroundColor }}>
+        <div className='[ static  h-screen w-full p-5 ]' style={{ backgroundColor: BackgroundColor }}>
             <div className='[ flex justify-center flex-col  items-center w-full h-full   ]'>
-                <div className='[ w-auto  ] [ md:w-auto ] [ lg:w-auto ] '>
+                <div className='[ w-auto flex flex-col gap-3  ] [ md:w-auto ] [ lg:w-auto ] '>
                     <div
                         style={{ fontFamily: "'Montserrat', sans-serif, 'Orbitron', sans-serif" }}
-                        className='[ text-4xl flex gap-3 items-center ] [ md:text-5xl ] [ lg:text-9xl ] '
+                        className='[ text-4xl flex gap-3 items-center justify-center ] [ md:text-5xl ] [ lg:text-9xl ] '
                     >
                         <div>{hora}</div>
                         <div>:</div>
