@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Footer } from './Footer_Clock.jsx';
+import { Alert } from '../components/Alert.jsx';
+import { InfoSvg } from '../svg/info.jsx';
+
 
 
 
@@ -44,10 +47,17 @@ export const Clock = () => {
     const [humidity, sethumidity] = useState('Cargando');
     const [weatherEmoji, setWeatherEmoji] = useState('https://placehold.jp/3d4070/ffffff/150x150.png?text=Cargando...');
 
+    const [PermisosUbicacion, setPermisosUbicacion] = useState(true);
+
     useEffect(() => {
         const apiKey = import.meta.env.VITE_APY_KEY;
 
         function ObtenerLocalizacion() {
+
+            if (!PermisosUbicacion) {
+                return;
+            }
+
             sethumidity("Cargando");
             setTemperature("Cargando");
             setFeelsLike("Cargando");
@@ -64,9 +74,11 @@ export const Clock = () => {
 
                 }, function (error) {
                     console.error('Error al obtener la ubicación:', error);
+                    setPermisosUbicacion(false);
                 });
             } else {
                 console.error('La geolocalización no es compatible con este navegador.');
+                setPermisosUbicacion(false);
             }
 
         }
@@ -194,6 +206,14 @@ export const Clock = () => {
         Content: "Pantalla Completa",
         OnClick: onClickWorking
     }];
+
+    const Alert_data = {
+        Content: 'Para Obtener Datos Meteorologicos Permita Acceder a su Ubicacion',
+        OnClick: "",
+        ClassData: "alert alert-info",
+        Svg_icon: <InfoSvg className="stroke-white stroke-2 w-5 h-5" />
+    };
+
     return (<>
         <div className='[ static  h-screen w-full  ]' style={{ backgroundColor: BackgroundColor }}>
             <div className='[ flex justify-center flex-col  items-center w-full h-full   ]'>
@@ -209,23 +229,32 @@ export const Clock = () => {
                         <div>{segundos}</div>
                         <div className='[ text-lg ]'>{ampm} </div>
                     </div>
-                    <div className='[ flex flex-nowrap w-full justify-between flex-col ]'>
-                        <div>{Country + " " + Fecha}</div>
-                        <div className='[ font-light flex gap-3 justify- items-center ]'>
-                            Temperatura: <span className='[ font-bold ]'>{temperature}</span>
-                            <img className='[ w-10 h-10 ]' src={`${weatherEmoji}`} alt="" />
-                        </div>
-                        <div className='[ font-light ]'>
-                            Sensacion Termica: <span className='[ font-bold ]'>{feelsLike}</span>
-                        </div>
-                        <div className='[ font-light ]'>
-                            Humedad: <span className='[ font-bold ]'>{humidity}</span>
-                        </div>
 
-                        <div className='[ font-light ]'>
-                            Velocidad del viento: <span className='[ font-bold ]'>{windSpeed}</span>
+                    {!PermisosUbicacion && (
+                        <Alert Content={Alert_data.Content} onClick={Alert_data.OnClick} Class={Alert_data.ClassData} Svg_icon={Alert_data.Svg_icon} />
+                    )}
+
+                    {PermisosUbicacion && (
+                        <div className='[ flex flex-nowrap w-full justify-between flex-col ]'>
+                            <div>{Country + " " + Fecha}</div>
+                            <div className='[ font-light flex gap-3 justify- items-center ]'>
+                                Temperatura: <span className='[ font-bold ]'>{temperature}</span>
+                                <img className='[ w-10 h-10 ]' src={`${weatherEmoji}`} alt="" />
+                            </div>
+                            <div className='[ font-light ]'>
+                                Sensacion Termica: <span className='[ font-bold ]'>{feelsLike}</span>
+                            </div>
+                            <div className='[ font-light ]'>
+                                Humedad: <span className='[ font-bold ]'>{humidity}</span>
+                            </div>
+
+                            <div className='[ font-light ]'>
+                                Velocidad del viento: <span className='[ font-bold ]'>{windSpeed}</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+
                 </div>
 
             </div>
