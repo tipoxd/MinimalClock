@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Footer } from './Footer_Clock.jsx';
 import { Alert } from '../components/Alert.jsx';
 import { InfoSvg } from '../svg/info.jsx';
+import { de } from 'date-fns/locale';
 
 
 
@@ -214,6 +215,34 @@ export const Clock = () => {
         Svg_icon: <InfoSvg className="stroke-white stroke-2 w-5 h-5" />
     };
 
+    function getColorClassTemperature(temperature) {
+        temperature = temperature.replace("°C", "");
+
+        if (temperature >= 30) {
+            return 'text-red-400';
+        } else if (temperature >= 20) {
+            return 'text-orange-400';
+        } else if (temperature >= 10) {
+            return 'text-white';
+        } else if (temperature <= 0) {
+            return 'text-blue-400';
+        }
+    }
+
+    function getColorClassHumidity(humidity) {
+        humidity = humidity.replace("m/s", "");
+        humidity = humidity.replace("%", "");
+        if (humidity <= 30) {
+            return 'text-blue-400'; // Baja humedad
+        } else if (humidity <= 60) {
+            return 'text-green-400'; // Humedad moderada
+        } else if (humidity <= 80) {
+            return 'text-yellow-400'; // Alta humedad
+        } else if (humidity <= 100) {
+            return 'text-red-400'; // Muy alta humedad
+        }
+    }
+
     return (<>
         <div className='[ static  h-screen w-full p-5 ]' style={{ backgroundColor: BackgroundColor }}>
             <div className='[ flex justify-center flex-col  items-center w-full h-full   ]'>
@@ -238,18 +267,18 @@ export const Clock = () => {
                         <div className='[ flex flex-nowrap w-full justify-between flex-col ]'>
                             <div>{Country + " " + Fecha}</div>
                             <div className='[ font-light flex gap-3 justify- items-center ]'>
-                                Temperatura: <span className='[ font-bold ]'>{temperature}</span>
+                                Temperatura: <span className={"[ font-bold " + getColorClassTemperature(temperature) + " ]"} >{temperature}</span>
                                 <img className='[ w-10 h-10 ]' src={`${weatherEmoji}`} alt="" />
                             </div>
                             <div className='[ font-light ]'>
-                                Sensacion Termica: <span className='[ font-bold ]'>{feelsLike}</span>
+                                Sensacion Termica: <span className={"[ font-bold " + getColorClassTemperature(feelsLike) + " ]"}>{feelsLike}</span>
                             </div>
                             <div className='[ font-light ]'>
-                                Humedad: <span className='[ font-bold ]'>{humidity}</span>
+                                Humedad: <span className={"[ font-bold " + getColorClassHumidity(humidity) + " ]"}>{humidity}</span>
                             </div>
 
                             <div className='[ font-light ]'>
-                                Velocidad del viento: <span className='[ font-bold ]'>{windSpeed}</span>
+                                Velocidad del viento: <span className={"[ font-bold ]"}>{windSpeed}</span>
                             </div>
                         </div>
                     )}
