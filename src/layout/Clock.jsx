@@ -230,7 +230,6 @@ export const Clock = () => {
     }
 
     function getColorClassHumidity(humidity) {
-        humidity = humidity.replace("m/s", "");
         humidity = humidity.replace("%", "");
         if (humidity <= 30) {
             return 'text-blue-400'; // Baja humedad
@@ -240,6 +239,18 @@ export const Clock = () => {
             return 'text-yellow-400'; // Alta humedad
         } else if (humidity <= 100) {
             return 'text-red-400'; // Muy alta humedad
+        }
+    }
+    function getColorClassWindSpeed(windSpeed) {
+        windSpeed = windSpeed.replace("m/s", "");
+        if (windSpeed <= 10) {
+            return 'text-blue-400'; // Baja velocidad del viento
+        } else if (windSpeed <= 20) {
+            return 'text-green-400'; // Velocidad del viento moderada
+        } else if (windSpeed <= 30) {
+            return 'text-yellow-400'; // Alta velocidad del viento
+        } else if (windSpeed > 30) {
+            return 'text-red-400'; // Muy alta velocidad del viento
         }
     }
 
@@ -278,7 +289,7 @@ export const Clock = () => {
                             </div>
 
                             <div className='[ font-light ]'>
-                                Velocidad del viento: <span className={"[ font-bold ]"}>{windSpeed}</span>
+                                Velocidad del viento: <span className={"[ font-bold " + getColorClassWindSpeed(windSpeed) + " ]"}>{windSpeed}</span>
                             </div>
                         </div>
                     )}
